@@ -9,12 +9,11 @@ const {
   removeFriend
 } = require('../../controllers/champion-controller');
 
-// Define routes
 router.route('/')
   .get(getAllChampions)
   .post(createChampion);
 
-router.route('/:id')
+router.route('/:championId')
   .get(getChampionById)
   .put(updateChampion)
   .delete(deleteChampion);
