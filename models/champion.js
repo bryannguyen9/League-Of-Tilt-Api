@@ -15,7 +15,7 @@ const championSchema = new mongoose.Schema({
     type: String,
     required: true,
     unique: true,
-    match: [/^[\w-]+(\.[\w-]+)*@([\w-]+\.)+[a-zA-Z]{2,7}$/, 'Please provide a valid email']
+    match: [/^[^\s@]+@[^\s@]+\.[^\s@]+$/, 'Please provide a valid email']
   },
   thoughts: [
     {

@@ -1,5 +1,6 @@
 // models/Thought.js
 const mongoose = require('mongoose');
+const dateFormat = require('../utils/dateFormat');
 
 const ThoughtSchema = new mongoose.Schema(
   {
@@ -12,7 +13,7 @@ const ThoughtSchema = new mongoose.Schema(
     createdAt: {
       type: Date,
       default: Date.now,
-      get: timestamp => dateFormat(timestamp)
+      get: (timestamp) => dateFormat(timestamp),
     },
     championName: {
       type: String,

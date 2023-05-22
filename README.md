@@ -66,9 +66,9 @@ Use the following guidelines to set up your models and API routes:
 
 ### Models
 
-**User**:
+**champion**:
 
-- `username`
+- `championname`
 
   - String
   - Unique
@@ -87,11 +87,11 @@ Use the following guidelines to set up your models and API routes:
   - Array of `_id` values referencing the `Thought` model
 
 - `friends`
-  - Array of `_id` values referencing the `User` model (self-reference)
+  - Array of `_id` values referencing the `champion` model (self-reference)
 
 **Schema Settings**:
 
-Create a virtual called `friendCount` that retrieves the length of the user's `friends` array field on query.
+Create a virtual called `friendCount` that retrieves the length of the champion's `friends` array field on query.
 
 ---
 
@@ -109,7 +109,7 @@ Create a virtual called `friendCount` that retrieves the length of the user's `f
   - Set default value to the current timestamp
   - Use a getter method to format the timestamp on query
 
-- `username` (The user that created this thought)
+- `championname` (The champion that created this thought)
 
   - String
   - Required
@@ -136,7 +136,7 @@ Create a virtual called `reactionCount` that retrieves the length of the thought
   - Required
   - 280 character maximum
 
-- `username`
+- `championname`
 
   - String
   - Required
@@ -152,35 +152,35 @@ This will not be a model, but rather will be used as the `reaction` field's subd
 
 ### API Routes
 
-**`/api/users`**
+**`/api/champions`**
 
-- `GET` all users
+- `GET` all champions
 
-- `GET` a single user by its `_id` and populated thought and friend data
+- `GET` a single champion by its `_id` and populated thought and friend data
 
-- `POST` a new user:
+- `POST` a new champion:
 
 ```json
 // example data
 {
-  "username": "lernantino",
+  "championname": "lernantino",
   "email": "lernantino@gmail.com"
 }
 ```
 
-- `PUT` to update a user by its `_id`
+- `PUT` to update a champion by its `_id`
 
-- `DELETE` to remove user by its `_id`
+- `DELETE` to remove champion by its `_id`
 
-**BONUS**: Remove a user's associated thoughts when deleted.
+**BONUS**: Remove a champion's associated thoughts when deleted.
 
 ---
 
-**`/api/users/:userId/friends/:friendId`**
+**`/api/champions/:championId/friends/:friendId`**
 
-- `POST` to add a new friend to a user's friend list
+- `POST` to add a new friend to a champion's friend list
 
-- `DELETE` to remove a friend from a user's friend list
+- `DELETE` to remove a friend from a champion's friend list
 
 ---
 
@@ -190,14 +190,14 @@ This will not be a model, but rather will be used as the `reaction` field's subd
 
 - `GET` to get a single thought by its `_id`
 
-- `POST` to create a new thought (don't forget to push the created thought's `_id` to the associated user's `thoughts` array field)
+- `POST` to create a new thought (don't forget to push the created thought's `_id` to the associated champion's `thoughts` array field)
 
 ```json
 // example data
 {
   "thoughtText": "Here's a cool thought...",
-  "username": "lernantino",
-  "userId": "5edff358a0fcb779aa7b118b"
+  "championname": "lernantino",
+  "championId": "5edff358a0fcb779aa7b118b"
 }
 ```
 
@@ -239,7 +239,7 @@ This Challenge is graded based on the following criteria:
 
   - The walkthrough video must demonstrate how to start the application’s server.
 
-  - The walkthrough video must demonstrate GET routes for all users and all thoughts being tested in Insomnia.
+  - The walkthrough video must demonstrate GET routes for all champions and all thoughts being tested in Insomnia.
 
   - The walkthrough video must demonstrate GET routes for a single user and a single thought being tested in Insomnia.
 
