@@ -1,6 +1,9 @@
+// reactionController.js
+
 const { Champion, Thought, Reaction } = require('./models');
 
 const reactionController = {
+  // Create a new reaction for a thought
   createReaction: async (req, res) => {
     try {
       const { thoughtId } = req.params;
@@ -22,6 +25,7 @@ const reactionController = {
     }
   },
 
+  // Delete a reaction by ID
   deleteReaction: async (req, res) => {
     try {
       const { thoughtId, reactionId } = req.params;
