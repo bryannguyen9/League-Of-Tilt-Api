@@ -7,7 +7,7 @@ const {
   deleteChampion,
   addFriend,
   removeFriend
-} = require('../../controllers/champion-controller');
+} = require('../../controllers/championController');
 
 router.route('/')
   .get(getAllChampions)

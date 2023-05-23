@@ -1,6 +1,6 @@
 // championController.js
 
-const { Champion, Thought } = require('./models');
+const { Champion, Thought, Reaction } = require('../models');
 
 const championController = {
   // Get all champions

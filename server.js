@@ -1,11 +1,11 @@
 // server.js
 const express = require('express');
-const connectDB = require('./config/connectDB');
+const connectDB = require('./config/connection');
 
 // Import routes
-const championRoutes = require('./routes/championrRoutes');
-const thoughtRoutes = require('./routes/thoughtRoutes');
-const reactionRoutes = require('./routes/reactionRoutes');
+const championRoutes = require('./routes/api/championRoutes');
+const thoughtRoutes = require('./routes/api/thoughtRoutes');
+const reactionRoutes = require('./routes/api/reactionRoutes');
 
 
 const app = express();

@@ -2,12 +2,12 @@ const express = require('express');
 const router = express.Router();
 
 const {
-  addReaction,
+  createReaction,
   deleteReaction
-} = require('../controllers/reaction-controller');
+} = require('../../controllers/reactionController');
 
 // POST /api/thoughts/:thoughtId/reactions
-router.route('/:thoughtId/reactions').post(addReaction);
+router.route('/:thoughtId/reactions').post(createReaction);
 
 // DELETE /api/thoughts/:thoughtId/reactions
 router.route('/:thoughtId/reactions').delete(deleteReaction);

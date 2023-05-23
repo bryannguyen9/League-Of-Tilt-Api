@@ -1,6 +1,6 @@
 // reactionController.js
 
-const { Champion, Thought, Reaction } = require('./models');
+const { Champion, Thought, Reaction } = require('../models');
 
 const reactionController = {
   // Create a new reaction for a thought

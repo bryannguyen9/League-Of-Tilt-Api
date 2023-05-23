@@ -1,8 +1,35 @@
 // thoughtController.js
 
-const { Champion, Thought } = require('./models');
+const { Champion, Thought, Reaction } = require('../models');
 
 const thoughtController = {
+  // Get all thoughts
+  getAllThoughts: async (req, res) => {
+    try {
+      const thoughts = await Thought.find();
+      res.json(thoughts);
+    } catch (err) {
+      console.log(err);
+      res.status(500).json(err);
+    }
+  },
+
+  // Get thought by ID
+  getThoughtById: async (req, res) => {
+    try {
+      const { id } = req.params;
+      const thought = await Thought.findById(id);
+      if (!thought) {
+        res.status(404).json({ message: 'No thought found with this id' });
+        return;
+      }
+      res.json(thought);
+    } catch (err) {
+      console.log(err);
+      res.status(500).json(err);
+    }
+  },
+
   // Create a new thought
   createThought: async (req, res) => {
     try {
@@ -19,6 +46,22 @@ const thoughtController = {
         return;
       }
       res.status(201).json(newThought);
+    } catch (err) {
+      console.log(err);
+      res.status(400).json(err);
+    }
+  },
+
+  // Update a thought by ID
+  updateThought: async (req, res) => {
+    try {
+      const { id } = req.params;
+      const updatedThought = await Thought.findByIdAndUpdate(id, req.body, { new: true });
+      if (!updatedThought) {
+        res.status(404).json({ message: 'No thought found with this id' });
+        return;
+      }
+      res.json(updatedThought);
     } catch (err) {
       console.log(err);
       res.status(400).json(err);
@@ -43,14 +86,12 @@ const thoughtController = {
         res.status(404).json({ message: 'No champion found with this id' });
         return;
       }
-      // Delete reactions associated with the thought
-      await Reaction.deleteMany({ _id: { $in: deletedThought.reactions } });
       res.json(deletedThought);
     } catch (err) {
       console.log(err);
       res.status(500).json(err);
     }
-  }
+  },
 };
 
 module.exports = thoughtController;
