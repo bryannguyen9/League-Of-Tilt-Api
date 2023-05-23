@@ -1,292 +1,208 @@
 # League-Of-Tilt-Api
 
-# 18 NoSQL: Social Network API
+## Description
 
-## Your Task
+League-Of-Tilt-Api is a RESTful API that provides endpoints for managing champions and their associated thoughts and reactions. The API allows users to perform CRUD operations on champions, create thoughts related to champions, and add reactions to thoughts. It serves as the backend for the League of Tilt web application.
 
-MongoDB is a popular choice for many social networks due to its speed with large amounts of data and flexibility with unstructured data. Over the last part of this course, you’ll use several of the technologies that social networking platforms use in their full-stack applications. Because the foundation of these applications is data, it’s important that you understand how to build and structure the API first.
+[Walkthrough Video](https://drive.google.com/file/d/1sRWAuofxkfsm9ZywEVc9qsNqKnAhyiRe/view)
 
-Your Challenge is to build an API for a social network web application where champions can share their thoughts, react to friends’ thoughts, and create a friend list. You’ll use Express.js for routing, a MongoDB database, and the Mongoose ODM. In addition to using the [Express.js](https://www.npmjs.com/package/express) and [Mongoose](https://www.npmjs.com/package/mongoose) packages, you may also optionally use a JavaScript date library of your choice or the native JavaScript `Date` object to format timestamps.
+## Table of Contents
 
-No seed data is provided, so you’ll need to create your own data using Insomnia after you’ve created your API.
+- [Installation](#installation)
+- [Usage](#usage)
+- [Endpoints](#endpoints)
+- [Models](#models)
+- [Technologies Used](#technologies-used)
+- [Contributing](#contributing)
+- [License](#license)
 
-Because this application won’t be deployed, you’ll also need to create a walkthrough video that demonstrates its functionality and all of the following acceptance criteria being met. You’ll need to submit a link to the video and add it to the README of your project.
+## Installation
 
-## champion Story
+1. Clone the repository or download the source code files.
+2. Make sure you have Node.js and npm installed on your machine.
+3. Navigate to the project directory in your terminal.
+4. Install the required dependencies by running the following command:
 
-```md
-AS A social media startup
-I WANT an API for my social network that uses a NoSQL database
-SO THAT my website can handle large amounts of unstructured data
-```
+   ```bash
+   npm install
+   ```
 
-## Acceptance Criteria
+5. Set up your database by running the SQL scripts provided in the `database` folder.
 
-```md
-GIVEN a social network API
-WHEN I enter the command to invoke the application
-THEN my server is started and the Mongoose models are synced to the MongoDB database
-WHEN I open API GET routes in Insomnia for champions and thoughts
-THEN the data for each of these routes is displayed in a formatted JSON
-WHEN I test API POST, PUT, and DELETE routes in Insomnia
-THEN I am able to successfully create, update, and delete champions and thoughts in my database
-WHEN I test API POST and DELETE routes in Insomnia
-THEN I am able to successfully create and delete reactions to thoughts and add and remove friends to a champion’s friend list
-```
+6. Seed data by running the following command:
 
-## Mock Up
+   ```bash
+   npm run seed
+   ```
 
-The following animations show examples of the application's API routes being tested in Insomnia.
+7. Start the server by running the following command:
 
-The following animation shows GET routes to return all champions and all thoughts being tested in Insomnia:
+   ```bash
+   npm start
+   ```
 
-![Demo of GET routes to return all champions and all thoughts being tested in Insomnia.](./Assets/18-nosql-homework-demo-01.gif)
+8. The API should now be running on `http://localhost:3001`.
 
-The following animation shows GET routes to return a single champion and a single thought being tested in Insomnia:
+## Usage
 
-![Demo that shows GET routes to return a single champion and a single thought being tested in Insomnia.](./Assets/18-nosql-homework-demo-02.gif)
+League-Of-Tilt-Api provides several endpoints for managing champions, thoughts, and reactions. You can interact with the API using tools like Insomnia or Postman. Here are the available endpoints:
 
-The following animation shows the POST, PUT, and DELETE routes for champions being tested in Insomnia:
+### Champions
 
-![Demo that shows the POST, PUT, and DELETE routes for champions being tested in Insomnia.](./Assets/18-nosql-homework-demo-03.gif)
+- `GET /api/champions`: Get all champions.
+- `GET /api/champions/{championId}`: Get a specific champion by ID.
+- `POST /api/champions`: Create a new champion.
+- `PUT /api/champions/{championId}`: Update a champion.
+- `DELETE /api/champions/{championId}`: Delete a champion.
+- `POST /api/champions/{championId}/friends`: Add a friend to a champion.
+- `DELETE /api/champions/{championId}/friends/{friendId}`: Remove a friend from a champion.
 
-In addition to this, your walkthrough video should show the POST, PUT, and DELETE routes for thoughts being tested in Insomnia.
+### Thoughts
 
-The following animation shows the POST and DELETE routes for a champion’s friend list being tested in Insomnia:
+- `GET /api/thoughts`: Get all thoughts.
+- `GET /api/thoughts/{thoughtId}`: Get a specific thought by ID.
+- `POST /api/champions/{championId}/thoughts`: Create a new thought for a champion.
+- `PUT /api/thoughts/{thoughtId}`: Update a thought.
+- `DELETE /api/champions/{championId}/thoughts/{thoughtId}`: Delete a thought.
 
-![Demo that shows the POST and DELETE routes for a champion’s friend list being tested in Insomnia.](./Assets/18-nosql-homework-demo-04.gif)
+### Reactions
 
-In addition to this, your walkthrough video should show the POST and DELETE routes for reactions to thoughts being tested in Insomnia.
+- `POST /api/thoughts/{thoughtId}/reactions`: Create a new reaction for a thought.
+- `DELETE /api/thoughts/{thoughtId}/reactions/{reactionId}`: Delete a reaction.
 
-## Getting Started
+Make sure to replace `{championId}`, `{friendId}`, `{thoughtId}`, and `{reactionId}` with the appropriate IDs in the URL.
 
-Be sure to have MongoDB installed on your machine. Follow the [MongoDB installation guide on The Full-Stack Blog](https://coding-boot-camp.github.io/full-stack/mongodb/how-to-install-mongodb) to install MongoDB locally.
+## Endpoints
 
-Use the following guidelines to set up your models and API routes:
+### Champions
 
-### Models
+#### GET /api/champions
 
-**champion**:
+Returns all champions in the database.
 
-- `championName`
+#### GET /api/champions/{championId}
 
-  - String
-  - Unique
-  - Required
-  - Trimmed
+Returns a specific champion by ID.
 
-- `email`
+#### POST /api/champions
 
-  - String
-  - Required
-  - Unique
-  - Must match a valid email address (look into Mongoose's matching validation)
+Creates a new champion.
 
-- `thoughts`
-
-  - Array of `_id` values referencing the `Thought` model
-
-- `friends`
-  - Array of `_id` values referencing the `champion` model (self-reference)
-
-**Schema Settings**:
-
-Create a virtual called `friendCount` that retrieves the length of the champion's `friends` array field on query.
-
----
-
-**Thought**:
-
-- `thoughtText`
-
-  - String
-  - Required
-  - Must be between 1 and 280 characters
-
-- `createdAt`
-
-  - Date
-  - Set default value to the current timestamp
-  - Use a getter method to format the timestamp on query
-
-- `championName` (The champion that created this thought)
-
-  - String
-  - Required
-
-- `reactions` (These are like replies)
-  - Array of nested documents created with the `reactionSchema`
-
-**Schema Settings**:
-
-Create a virtual called `reactionCount` that retrieves the length of the thought's `reactions` array field on query.
-
----
-
-**Reaction** (SCHEMA ONLY)
-
-- `reactionId`
-
-  - Use Mongoose's ObjectId data type
-  - Default value is set to a new ObjectId
-
-- `reactionBody`
-
-  - String
-  - Required
-  - 280 character maximum
-
-- `championName`
-
-  - String
-  - Required
-
-- `createdAt`
-  - Date
-  - Set default value to the current timestamp
-  - Use a getter method to format the timestamp on query
-
-**Schema Settings**:
-
-This will not be a model, but rather will be used as the `reaction` field's subdocument schema in the `Thought` model.
-
-### API Routes
-
-**`/api/champions`**
-
-- `GET` all champions
-
-- `GET` a single champion by its `_id` and populated thought and friend data
-
-- `POST` a new champion:
+Example Request Body:
 
 ```json
-// example data
 {
-  "championName": "lernantino",
-  "email": "lernantino@gmail.com"
+  "championName": "Test Champion Name",
+  "email": "testchampion@example.com"
 }
 ```
 
-- `PUT` to update a champion by its `_id`
+#### PUT /api/champions/{championId}
 
-- `DELETE` to remove champion by its `_id`
+Updates a champion.
 
-**BONUS**: Remove a champion's associated thoughts when deleted.
-
----
-
-**`/api/champions/:championId/friends/:friendId`**
-
-- `POST` to add a new friend to a champion's friend list
-
-- `DELETE` to remove a friend from a champion's friend list
-
----
-
-**`/api/thoughts`**
-
-- `GET` to get all thoughts
-
-- `GET` to get a single thought by its `_id`
-
-- `POST` to create a new thought (don't forget to push the created thought's `_id` to the associated champion's `thoughts` array field)
+Example Request Body:
 
 ```json
-// example data
 {
-  "thoughtText": "Here's a cool thought...",
-  "championName": "lernantino",
-  "championId": "5edff358a0fcb779aa7b118b"
+  "championName": "New Updated Champion Name"
 }
 ```
 
-- `PUT` to update a thought by its `_id`
+#### DELETE /api/champions/{championId}
 
-- `DELETE` to remove a thought by its `_id`
+Deletes a champion.
 
----
+### Thoughts
 
-**`/api/thoughts/:thoughtId/reactions`**
+#### GET /api/thoughts
 
-- `POST` to create a reaction stored in a single thought's `reactions` array field
+Returns all thoughts in the database.
 
-- `DELETE` to pull and remove a reaction by the reaction's `reactionId` value
+#### GET /api/thoughts/{thoughtId}
 
-## Grading Requirements
+Returns a specific thought by ID.
 
-> **Note**: If a Challenge assignment submission is marked as “0”, it is considered incomplete and will not count towards your graduation requirements. Examples of incomplete submissions include the following:
->
-> - A repository that has no code
->
-> - A repository that includes a unique name but nothing else
->
-> - A repository that includes only a README file but nothing else
->
-> - A repository that only includes starter code
+#### POST /api/thoughts/{thoughtId}
 
-This Challenge is graded based on the following criteria:
+Creates a new thought.
 
-### Deliverables: 10%
+Example Request Body:
 
-- Your GitHub repository containing your application code.
+```json
+{
+  "championName": "Fizz",
+  "thoughtText": "New Thought text goes here"
+}
+```
 
-### Walkthrough Video: 37%
+#### PUT /api/thoughts/{thoughtId}
 
-- A walkthrough video that demonstrates the functionality of the social media API must be submitted, and a link to the video should be included in your README file.
+Updates a thought.
 
-  - The walkthrough video must show all of the technical acceptance criteria being met.
+Example Request Body:
 
-  - The walkthrough video must demonstrate how to start the application’s server.
+```json
+{
+  "thoughtText": "Update thought text"
+}
+```
 
-  - The walkthrough video must demonstrate GET routes for all champions and all thoughts being tested in Insomnia.
+#### DELETE /api/champions/{championId}/thoughts/{thoughtId}
 
-  - The walkthrough video must demonstrate GET routes for a single champion and a single thought being tested in Insomnia.
+Deletes a thought.
 
-  - The walkthrough video must demonstrate POST, PUT, and DELETE routes for champions and thoughts being tested in Insomnia.
+### Reactions
 
-  - Walkthrough video must demonstrate POST and DELETE routes for a champion’s friend list being tested in Insomnia.
+#### POST /api/thoughts/{thoughtId}/reactions
 
-  - Walkthrough video must demonstrate POST and DELETE routes for reactions to thoughts being tested in Insomnia.
+Creates a new reaction for a thought.
 
-### Technical Acceptance Criteria: 40%
+Example Request Body:
 
-- Satisfies all of the preceding acceptance criteria plus the following:
+```json
+{
+  "username": "Yasuo",
+  "reactionBody": "This is a reaction to the thought"
+}
+```
 
-  - Uses the [Mongoose package](https://www.npmjs.com/package/mongoose) to connect to a MongoDB database.
+#### DELETE /api/thoughts/{thoughtId}/reactions/{reactionId}
 
-  - Includes champion and Thought models outlined in the Challenge instructions.
+Deletes a reaction.
 
-  - Includes schema settings for champion and Thought models as outlined in the Challenge instructions.
+## Models
 
-  - Includes Reactions as the `reaction` field's subdocument schema in the Thought model.
+The API uses the following models:
 
-  - Uses functionality to format queried timestamps properly.
+- Champion: Represents a champion in the game.
+- Thought: Represents a thought or comment about a champion.
+- Reaction: Represents a reaction to a thought.
 
-### Repository Quality: 13%
+## Technologies Used
 
-- Repository has a unique name.
+The following technologies and packages were used in the development of this API:
 
-- Repository follows best practices for file structure and naming conventions.
+- Node.js
+- Express.js
+- Sequelize (ORM for interacting with the database)
+- MongoDB (Database)
+- Dotenv (Environment variable management)
 
-- Repository follows best practices for class/id naming conventions, indentation, quality comments, etc.
+## My links
 
-- Repository contains multiple descriptive commit messages.
+### \* [Portfolio](https://bryannguyen9.github.io/Bryan-Nguyen-Portfolio/)
 
-- Repository contains a high-quality README with description and a link to a walkthrough video.
+### \* [LinkedIn](https://linkedin.com/in/bryannguyen9)
 
-### Bonus: +10 Points
+### \* [Github](https://github.com/bryannguyen9)
 
-- Application deletes a champion's associated thoughts when the champion is deleted.
+## Contributing
 
-## Review
+Contributions are welcome! If you find any issues or have suggestions for improvement, please feel free to open an issue or submit a pull request.
 
-You are required to submit BOTH of the following for review:
+## License
 
-- A walkthrough video demonstrating the functionality of the application and all of the acceptance criteria being met.
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
-- The URL of the GitHub repository. Give the repository a unique name and include a README describing the project.
-
----
-
-© 2023 edX Boot Camps LLC. Confidential and Proprietary. All Rights Reserved.
+This project is licensed under the MIT License. For more information, please see the [LICENSE](./LICENSE) file.
