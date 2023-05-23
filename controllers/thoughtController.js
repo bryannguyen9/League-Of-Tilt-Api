@@ -30,27 +30,35 @@ const thoughtController = {
     }
   },
 
-  // Create a new thought
   createThought: async (req, res) => {
     try {
-      const { championId } = req.params;
-      const thought = req.body;
-      const newThought = await Thought.create(thought);
-      const updatedChampion = await Champion.findOneAndUpdate(
-        { _id: championId },
+      const { id } = req.params; // Updated parameter name from championId to id
+      const { thoughtText, championName } = req.body;
+  
+      const newThought = await Thought.create({
+        thoughtText,
+        championName
+      });
+  
+      const updatedChampion = await Champion.findByIdAndUpdate(
+        id, // Use the updated parameter name
         { $push: { thoughts: newThought._id } },
         { new: true }
       );
+  
       if (!updatedChampion) {
         res.status(404).json({ message: 'No champion found with this id' });
         return;
       }
+  
       res.status(201).json(newThought);
     } catch (err) {
       console.log(err);
       res.status(400).json(err);
     }
   },
+  
+  
 
   // Update a thought by ID
   updateThought: async (req, res) => {
