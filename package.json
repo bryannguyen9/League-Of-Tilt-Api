@@ -1,4 +1,10 @@
 {
+  "name": "League-Of-Tilt-Api",
+  "version": "1.0.0",
+  "scripts": {
+    "start": "node server.js",
+    "seed": "node utils/seed.js"
+  },
   "dependencies": {
     "express": "^4.18.2",
     "mongodb": "^5.5.0",
