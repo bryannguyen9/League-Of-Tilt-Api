@@ -19,4 +19,8 @@ router.route('/:id')
   .put(updateThought)
   .delete(deleteThought);
 
+  router.route('/:championId')
+  .post(createThought);
+
+
 module.exports = router;

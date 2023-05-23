@@ -32,7 +32,7 @@ const thoughtController = {
 
   createThought: async (req, res) => {
     try {
-      const { id } = req.params; // Updated parameter name from championId to id
+      const { championId } = req.params;
       const { thoughtText, championName } = req.body;
   
       const newThought = await Thought.create({
@@ -41,7 +41,7 @@ const thoughtController = {
       });
   
       const updatedChampion = await Champion.findByIdAndUpdate(
-        id, // Use the updated parameter name
+        championId,
         { $push: { thoughts: newThought._id } },
         { new: true }
       );
@@ -57,6 +57,7 @@ const thoughtController = {
       res.status(400).json(err);
     }
   },
+  
   
   
 
@@ -79,15 +80,15 @@ const thoughtController = {
   // Delete a thought by ID
   deleteThought: async (req, res) => {
     try {
-      const { championId, thoughtId } = req.params;
-      const deletedThought = await Thought.findOneAndDelete({ _id: thoughtId });
+      const { id } = req.params;
+      const deletedThought = await Thought.findOneAndDelete({ _id: id });
       if (!deletedThought) {
         res.status(404).json({ message: 'No thought found with this id' });
         return;
       }
       const updatedChampion = await Champion.findOneAndUpdate(
-        { _id: championId },
-        { $pull: { thoughts: thoughtId } },
+        { thoughts: id },
+        { $pull: { thoughts: id } },
         { new: true }
       );
       if (!updatedChampion) {
@@ -100,6 +101,7 @@ const thoughtController = {
       res.status(500).json(err);
     }
   },
+  
 };
 
 module.exports = thoughtController;

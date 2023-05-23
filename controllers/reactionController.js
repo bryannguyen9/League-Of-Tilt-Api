@@ -1,5 +1,3 @@
-// reactionController.js
-
 const { Champion, Thought, Reaction } = require('../models');
 
 const reactionController = {
