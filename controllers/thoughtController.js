@@ -1,38 +1,122 @@
-const { Champion, Thought } = require('../models');
+const { Champion, Thought } = require('./models');
 
 const thoughtController = {
-  getAllThoughts(req, res) {
-    // Implement logic to get all thoughts from the database
-    // and return the data as JSON response
+  getAllThoughts: async (req, res) => {
+    try {
+      const thoughts = await Thought.find();
+      res.json(thoughts);
+    } catch (err) {
+      console.log(err);
+      res.status(500).json(err);
+    }
   },
 
-  getThoughtById(req, res) {
-    // Implement logic to get a single thought by ID from the database
-    // and return the data as JSON response
+  getThoughtById: async (req, res) => {
+    try {
+      const { id } = req.params;
+      const thought = await Thought.findOne({ _id: id });
+      if (!thought) {
+        res.status(404).json({ message: 'No thought found with this id' });
+        return;
+      }
+      res.json(thought);
+    } catch (err) {
+      console.log(err);
+      res.status(500).json(err);
+    }
   },
 
-  createThought(req, res) {
-    // Implement logic to create a new thought in the database
-    // based on the request body data
+  createThought: async (req, res) => {
+    try {
+      const { championId } = req.params;
+      const thought = await Thought.create(req.body);
+      const champion = await Champion.findOneAndUpdate(
+        { _id: championId },
+        { $push: { thoughts: thought._id } },
+        { new: true }
+      );
+      if (!champion) {
+        res.status(404).json({ message: 'No champion found with this id' });
+        return;
+      }
+      res.status(201).json(thought);
+    } catch (err) {
+      console.log(err);
+      res.status(400).json(err);
+    }
   },
 
-  updateThought(req, res) {
-    // Implement logic to update a thought by ID in the database
-    // based on the request body data
+  updateThought: async (req, res) => {
+    try {
+      const { id } = req.params;
+      const updatedThought = await Thought.findOneAndUpdate(
+        { _id: id },
+        req.body,
+        { new: true }
+      );
+      if (!updatedThought) {
+        res.status(404).json({ message: 'No thought found with this id' });
+        return;
+      }
+      res.json(updatedThought);
+    } catch (err) {
+      console.log(err);
+      res.status(500).json(err);
+    }
   },
 
-  deleteThought(req, res) {
-    // Implement logic to delete a thought by ID from the database
+  deleteThought: async (req, res) => {
+    try {
+      const { id } = req.params;
+      const deletedThought = await Thought.findOneAndDelete({ _id: id });
+      if (!deletedThought) {
+        res.status(404).json({ message: 'No thought found with this id' });
+        return;
+      }
+      res.json(deletedThought);
+    } catch (err) {
+      console.log(err);
+      res.status(500).json(err);
+    }
   },
 
-  addReaction(req, res) {
-    // Implement logic to add a reaction to a thought
-    // based on the request parameters (thoughtId) and body data
+  addReaction: async (req, res) => {
+    try {
+      const { id } = req.params;
+      const reaction = req.body;
+      const updatedThought = await Thought.findOneAndUpdate(
+        { _id: id },
+        { $push: { reactions: reaction } },
+        { new: true }
+      );
+      if (!updatedThought) {
+        res.status(404).json({ message: 'No thought found with this id' });
+        return;
+      }
+      res.json(updatedThought);
+    } catch (err) {
+      console.log(err);
+      res.status(500).json(err);
+    }
   },
 
-  deleteReaction(req, res) {
-    // Implement logic to delete a reaction from a thought
-    // based on the request parameters (thoughtId) and body data
+  removeReaction: async (req, res) => {
+    try {
+      const { thoughtId, reactionId } = req.params;
+      const updatedThought = await Thought.findOneAndUpdate(
+        { _id: thoughtId },
+        { $pull: { reactions: { reactionId: reactionId } } },
+        { new: true }
+      );
+      if (!updatedThought) {
+        res.status(404).json({ message: 'No thought found with this id' });
+        return;
+      }
+      res.json(updatedThought);
+    } catch (err) {
+      console.log(err);
+      res.status(500).json(err);
+    }
   }
 };
 
